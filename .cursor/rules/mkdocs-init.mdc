@@ -3,20 +3,30 @@ description:
 globs: 
 alwaysApply: false
 ---
-We are currently adding a MkDocs Material static site to the current repository. All documentation files are located in the `./docs` folder.
+---
+description: Bootstrap an MkDocs Material static-site for this repository: generate config/workflow files, restructure docs, fix Markdown issues, and set up navigation. Manual rule – invoke with @mkdocs-init.
+---
 
-1. Create mkdocs and workflow files:
-```
-./requirements_mkdocs.txt
+# MkDocs Material Setup — Manual Rule
 
-mkdocs>=1.6.0
-mkdocs-material>=9.6.0
-pymdown-extensions>=10.0
+## Goal
+Convert the repository’s `/docs` folder into a fully working **MkDocs Material** site deployed on GitHub Pages, with a clean navigation tree and lint-free build.
 
 ---
 
-./mkdocs.yml
+## Step-by-step actions
 
+### 1. Create mkdocs and workflow files:
+
+`requirements_mkdocs.txt`
+```
+mkdocs>=1.6.0
+mkdocs-material>=9.6.0
+pymdown-extensions>=10.0
+```
+
+`mkdocs.yml`
+```
 site_name:
 site_description:
 site_url:
@@ -150,11 +160,10 @@ plugins:
 # Navigation 
 nav:
   - Home: README.md
+```
 
----
-
-./.github/workflows/deploy-docs.yml
-
+`.github/workflows/deploy-docs.yml`
+```
 name: Deploy Documentation
 
 on:
@@ -259,11 +268,18 @@ jobs:
       - name: Test build
         run: mkdocs build --verbose --strict 
 ```
-2. Set my repository coordinates in mkdocs.yml (site_name, site_description, site_url, repo_name, repo_url)
-   For example, here's the static site address for our neighboring repository: https://netcracker.github.io/qubership-monitoring-operator
-3. Create a Home Page for the site according to the repository's purpose (read the README.md file in the root and also scan the repository structure). Do not use Emoji when creating content.
-   Name the new file README.md.
-4. Need to create navigation on the site.
+
+Set my repository coordinates in mkdocs.yml (site_name, site_description, site_url, repo_name, repo_url)
+
+For example, here's the static site address for our neighboring repository: https://netcracker.github.io/qubership-monitoring-operator
+
+### 2. Build **Home Page**
+
+Create a Home Page for the site according to the repository's purpose (read the README.md file in the root and also scan the repository structure). Do not use Emoji when creating content.
+Name the new file README.md.
+
+### 3. Build **navigation** (`nav:`) automatically.
+
 	 1. For this, distribute all documentation files `*.md` (exclude all files in the root, for example SECURITY.md, CONTRIBUTING.md, etc.) into groups according to the list:
 		   - Home
 		     "What it is?"
@@ -282,26 +298,52 @@ jobs:
 		
 	2. Then create groups listed above in the nav section of mkdocs.yaml file and place documents in them
 	3. ATTENTION: If there are no documents in any group, do not create a group in navigation
-5. Check the content of ALL MD files we're working with for manually created Table Of Content. It would have been made for convenient viewing in Github, but is not suitable for the site. 
+
+### 5. Clean all Markdown files
+
+Check the content of ALL MD files we're working with for manually created Table Of Content. It would have been made for convenient viewing in Github, but is not suitable for the site. 
 - Need to remove manually created Table Of Content and all references to it within the file. 
 - You can search for files using case insensitive phrases "table of content", "back to toc", etc. 
 - Sometimes there's no Table of content header, but the table of contents itself exists. You'll have to read all MD files.
 - After fixing, scan all files again, and if not everything was deleted - continue deleting.
-6. Make sure that each MD file has only one H1 heading. If this is not the case - then MkDocs will not display Table of Content. If there are multiple headings - reformat the headings.
-7. Add the `./site` and `./cursor` folders to .gitignore
-8. Choose an icon for the site according to the content.
-   Located at path: theme-->icon-->logo
-9. Need to test the site locally:
-	   - Create and activate Python Virtual Environment
-	     python3 -m venv venv
-	     source venv/bin/activate
-	   - Install dependencies for MkDocs
-	     pip install -r requirements_mkdocs.txt
-	   - mkdocs serve
-10. Fix all WARNINGS in logs. Before fixing, be sure to indicate what problems in the logs you found and agree with me how we solve or skip them. Mkdocs mainly scans hyperlink integrity and outputs this to errors.
+
+Make sure that each MD file has only one H1 heading. If this is not the case - then MkDocs will not display Table of Content. If there are multiple headings - reformat the headings.
+
+### 6. Update **.gitignore**
+
+Add the `./site` and `./cursor` folders to .gitignore
+
+### 7. Choose a **logo icon**
+
+Pick a Material-Design icon that matches the project domain and set it at  
+`theme.icon.logo` in `mkdocs.yml`.
+
+### 8. Test the site locally
+
+- Create and activate Python Virtual Environment
+    python3 -m venv venv
+    source venv/bin/activate
+- Install dependencies for MkDocs
+    pip install -r requirements_mkdocs.txt
+- mkdocs serve
+
+### 9. Fix _all_ build warnings
+
+Fix all WARNINGS in logs. Before fixing, be sure to indicate what problems in the logs you found and agree with me how we solve or skip them. Mkdocs mainly scans hyperlink integrity and outputs this to errors.
     If you run `mkdocs build --verbose --strict` then the build will fail if there are Warnings, which is convenient.
-11. Output the local mkdocs startup command
-    It will probably be something like: `source venv/bin/activate && mkdocs serve --dev-addr=127.0.0.1:8000` 
+
+### 10. Echo the local-serve command
+
+Echo the local mkdocs startup command
+It will probably be something like: `source venv/bin/activate && mkdocs serve --dev-addr=127.0.0.1:8000` 
 
 
-    
+## Constraints
+- Do not use Emoji in generated Markdown content.
+- Preserve existing doc filenames; only move them via navigation, never rename.
+- Keep template sections intact; modify only the placeholder values.
+- Interactive confirmation is required only for handling MkDocs warnings (Step 9).
+- Output the updated files and nothing else.
+
+## Invocation
+Save this rule as .cursor/rules/mkdocs-init.mdc, open any file in the repo and run @mkdocs-init to execute.

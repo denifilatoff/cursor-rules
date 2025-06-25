@@ -6,6 +6,7 @@ Custom rules for Cursor IDE that automate routine development tasks.
 
 - **mkdocs-init.mdc** - Complete MkDocs Material setup with themes, navigation, and CI/CD
 - **mkdocs-examples.mdc** - Automation for including code examples in documentation
+- **readme-update.mdc** - Update readme.md with industry standards"
 
 ## Installation
 
@@ -34,6 +35,10 @@ Type the following text using the `@` symbol to invoke a specific rule in new ch
 
 ```
 @mkdocs-examples Please help to include code examples from the examples folder in documentation
+```
+
+```
+@readme-update Please help to update README.md
 ```
 
 ## License

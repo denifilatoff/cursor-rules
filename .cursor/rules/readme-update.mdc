@@ -1,0 +1,92 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+---
+description: Scan repository (incl. mkdocs.yml), then refactor README.md into a 13-section outline with minimal edits and, where helpful, add a small mermaid architecture diagram. Manual rule – invoke with @readme-refactor.
+---
+
+# README Update — Manual Rule
+
+## Goal
+Produce a well-structured `README.md` that follows the template below **after** analysing the project’s code, docs and build setup.
+
+## Template
+1. **Project name & short description**  
+2. **Badges**  
+3. **Table of Contents**  
+4. **Features / key capabilities**  
+5. **Requirements**  
+6. **Installation / Quick start**  
+7. **Usage**  
+8. **Configuration**  
+9. **API Reference / Documentation**  
+10. **Architecture / Diagram**  
+11. **Testing**  
+12. **Contributing**  
+13. **License**
+
+## Mandatory pre-processing (Repository Scan)
+Before editing the README:
+
+1. **Enumerate top-level files & dirs** (root, `/docs`, `/examples`, `/scripts`, `/infra`, etc.).
+2. **Detect project type & toolchain**  
+   - Language manifests (`package.json`, `pyproject.toml`, `go.mod`, …).  
+   - Infrastructure files (`Dockerfile`, `docker-compose.yml`, Helm, Terraform).  
+   - CI configs (`.github/workflows`, `.gitlab-ci.yml`).  
+3. **MkDocs detection**  
+   - If `mkdocs.yml` / `mkdocs.yaml` exists, parse:  
+     - `site_url:` → canonical docs-site root (`https://user.github.io/project/`).  
+     - `nav:` tree → list of published pages.  
+   - Map local Markdown files → public URLs; trim `index.md` where appropriate.  
+4. **Skim key files** to extract runtime versions, entry points, test commands, etc.  
+5. Build a **mental map** of how the project is built, run, tested.
+
+## Additional rules
+
+### A. MkDocs projects
+If step 3 confirms MkDocs + GitHub Pages:
+
+* **Rewrite** README links that point to `/docs/...` so they use the **public site URLs**.  
+* Prefer public URLs when adding new doc links.  
+* Keep relative links for content **outside** the MkDocs site.
+
+### B. Mermaid diagram for Architecture
+For section 10 **Architecture / Diagram**:
+
+* **When to add**  
+  - No diagram exists **and** the high-level architecture can be expressed in ≤ 10 nodes.  
+* **How to add**  
+  - Insert a minimal `mermaid` block (flowchart or sequence) titled `### System overview`.  
+  - Stay coarse-grained: services/modules, external systems, major data stores.  
+  - Example skeleton (edit placeholders, keep ≤ 10 nodes):  
+    ```mermaid
+    flowchart LR
+        A([Client]) --> B((API))
+        B --> C[(Database)]
+        B --> D{{Cache}}
+    ```  
+* **If a diagram already exists**, keep it; only re-locate if needed.  
+* **If architecture is too complex**, create heading and leave `<!-- TODO: add diagram -->`.
+
+## Constraints during rewrite
+- Preserve every sentence, badge, code block, image, link and list unless relocation or deduplication is essential.  
+- **Do not rewrite technical content**; only move, merge headings or fix typos.  
+- Merge multiple fragments that belong to the same section in original order.  
+- If a required section is missing, add the heading followed by `<!-- TODO -->`.  
+- Use the **exact English section titles** above.  
+- Maintain heading levels (`#`, `##`, …) relative to root.  
+- Insert `<!-- toc -->` right after section 2 if no TOC exists.  
+- Place unmatched content under its own heading **after section 13**.
+
+## Algorithm
+0. **Repository scan** — perform steps 1-5 above.  
+1. Parse existing `README.md` headings (case-insensitive; recognise variants such as “Setup”, “How to use”).  
+2. Map each heading to the nearest template section using insights from the scan.  
+3. Re-order content to match the 1 → 13 sequence.  
+4. Rename headings to the exact template wording if they differ stylistically.  
+5. Apply MkDocs link-rewriting logic (if relevant).  
+6. Apply Mermaid diagram rule B.  
+7. Fill in missing details gleaned from the scan, or mark `<!-- TODO -->`.  
+8. Output **only** the complete, updated `README.md`.

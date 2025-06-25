@@ -3,12 +3,47 @@ description:
 globs: 
 alwaysApply: false
 ---
-If there are Examples in NON-Markdown files - they need to be included in the documentation in a readable format.
-For this, MkDocs has Embedding external files feature.
-   1. If Examples are not in docs and not in the project root - ignore them and proceed to the next step.
-   2. If Examples are not in docs folder but in the root - move the entire folder to docs
-   3. Distribute example files into logical groups. Confirm with the user the assignment of files to groups.
-   4. For each group of examples, create a separate file where we use mkdocs to display content directly on the page, adding concise headers and explanations when necessary.
-   5. Use the Mkdocs feature - Embedding external files (https://squidfunk.github.io/mkdocs-material/reference/code-blocks/?h=code+blo#embedding-external-files), so code is not duplicated. Because simply duplicating code will create maintenance issues for the documentation.
-   6. Create a separate Markdown file - an index, with links to the examples we created in the previous step. The index should also have a general description of the examples so users understand whether to visit them or not.
-   7. MANDATORY: include the resulting MD documents in navigation. 
+---
+description: Import non-Markdown “examples” into the MkDocs site with external-file embeds, then wire them into navigation. Manual rule – invoke with @examples-import.
+---
+
+# Examples Import — Manual Rule
+
+## Goal
+Make every **non-Markdown** example in the repo readable in the generated MkDocs site **without duplicating code**.
+
+---
+
+## Detection rules
+
+* Treat folders named *examples*, *samples* or *demos* (case-insensitive) as example roots.  
+* **Skip** an example folder if it is  
+  a) outside the repo root **and**  
+  b) outside `docs/`.  
+  (Ignore anything inside `third_party/`, `.venv/`, etc.)
+
+---
+
+## Processing steps
+
+1. **Relocate folders with examples**  
+	- If an example folder is in the repo root, move it to `docs/examples/<same-name>`.
+
+2. **Propose logical groups**  
+	- Default grouping = first-level sub-folders (or file type if flat).  
+	- Present the groups and their files; **get user confirmation**.
+
+3. **Create one NEW page per group**  
+	- For each group of examples, create a separate file where we use mkdocs to display content directly on the page, adding concise headers and explanations when necessary.
+    - *Use `--8<--` embed; **never** copy the code.* (https://squidfunk.github.io/mkdocs-material/reference/code-blocks/?h=code+blo#embedding-external-files)
+
+4. **Build an index page**
+	Create a separate Markdown file - an index, with links to the examples we created in the previous step. The index should also have a general description of the examples so users understand whether to visit them or not.
+
+5. **Update navigation**
+	Include the resulting MD documents in navigation. (`nav` chapter in `mkdocs.yml`)
+
+6. **Lint pass**
+   • Run `mkdocs build --verbose --strict`.  
+   • Fix new warnings (broken paths, duplicate headings, etc.).  
+   • If issues remain, list them and agree with the maintainer before skipping.
