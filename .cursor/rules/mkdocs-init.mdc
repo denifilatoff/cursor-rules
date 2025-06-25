@@ -1,0 +1,307 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+We are currently adding a MkDocs Material static site to the current repository. All documentation files are located in the `./docs` folder.
+
+1. Create mkdocs and workflow files:
+```
+./requirements_mkdocs.txt
+
+mkdocs>=1.6.0
+mkdocs-material>=9.6.0
+pymdown-extensions>=10.0
+
+---
+
+./mkdocs.yml
+
+site_name:
+site_description:
+site_url:
+
+# Repository
+repo_name:
+repo_url:
+edit_uri: edit/main/docs/
+
+# Configuration
+theme:
+  name: material
+  language: en
+  
+  palette:
+    # Dark theme by default
+    - media: "(prefers-color-scheme)"
+      scheme: slate
+      primary: indigo
+      accent: amber
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+    
+    # Light theme option
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: amber
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    
+    # Dark theme option (default)
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: amber
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+
+  # Advanced features
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.path
+    - navigation.indexes
+    - navigation.top
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.tabs.link
+    - content.code.copy
+    - content.code.select
+    - content.code.annotate
+
+  # Icons and fonts
+  favicon: assets/favicon.ico
+  icon:
+    logo: material/monitor-dashboard
+    repo: fontawesome/brands/github
+    edit: material/pencil
+    view: material/eye
+
+  font:
+    text: Roboto
+    code: Roboto Mono
+
+# Extensions with all requested features
+markdown_extensions:
+  # Basic extensions
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+      title: On this page
+      toc_depth: 6
+
+  # Enhanced code highlighting for YAML, JSON, Java, Go, Python
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+      use_pygments: true
+      pygments_style: default
+      noclasses: false
+  - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      base_path: docs
+
+  # Mermaid diagrams support
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+  # Advanced content features
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+  # Emoji support
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+  # Additional formatting
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.tilde
+  - pymdownx.caret
+  - pymdownx.betterem:
+      smart_enable: all
+
+# Plugins
+plugins:
+  - search:
+      separator: '[\s\-,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
+
+# Navigation 
+nav:
+  - Home: README.md
+
+---
+
+./.github/workflows/deploy-docs.yml
+
+name: Deploy Documentation
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+      - 'mkdocs.yml'
+      - 'requirements_mkdocs.txt'
+      - '.github/workflows/deploy-docs.yml'
+  pull_request:
+    branches:
+      - '**'
+    paths:
+      - 'docs/**'
+      - 'mkdocs.yml'
+      - 'requirements_mkdocs.txt'
+      - '.github/workflows/deploy-docs.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # Only deploy from main branch, not from PRs
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git Credentials
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+
+      - name: Setup cache
+        run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
+
+      - name: Cache MkDocs
+        uses: actions/cache@v4
+        with:
+          key: mkdocs-material-${{ env.cache_id }}
+          path: .cache
+          restore-keys: |
+            mkdocs-material-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements_mkdocs.txt
+
+      - name: Build docs
+        run: mkdocs build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'site'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  # Build-only job for PRs (to test that docs build correctly)
+  build-test:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements_mkdocs.txt
+
+      - name: Test build
+        run: mkdocs build --verbose --strict 
+```
+2. Set my repository coordinates in mkdocs.yml (site_name, site_description, site_url, repo_name, repo_url)
+   For example, here's the static site address for our neighboring repository: https://netcracker.github.io/qubership-monitoring-operator
+3. Create a Home Page for the site according to the repository's purpose (read the README.md file in the root and also scan the repository structure). Do not use Emoji when creating content.
+   Name the new file README.md.
+4. Need to create navigation on the site.
+	 1. For this, distribute all documentation files `*.md` (exclude all files in the root, for example SECURITY.md, CONTRIBUTING.md, etc.) into groups according to the list:
+		   - Home
+		     "What it is?"
+		   - Installation
+		     "I want to install the system"
+		   - Architecture & Components
+		     "I want to understand how the system works"
+		   - Configuration
+		      "I want to configure the system and see examples"
+		   - Integrations
+		     "I want to integrate with external systems and see examples"
+		   - Security
+		     "I want to secure the system"
+		   - Operations
+		     "The system is running, I want to maintain it"
+		
+	2. Then create groups listed above in the nav section of mkdocs.yaml file and place documents in them
+	3. ATTENTION: If there are no documents in any group, do not create a group in navigation
+5. Check the content of ALL MD files we're working with for manually created Table Of Content. It would have been made for convenient viewing in Github, but is not suitable for the site. 
+- Need to remove manually created Table Of Content and all references to it within the file. 
+- You can search for files using case insensitive phrases "table of content", "back to toc", etc. 
+- Sometimes there's no Table of content header, but the table of contents itself exists. You'll have to read all MD files.
+- After fixing, scan all files again, and if not everything was deleted - continue deleting.
+6. Make sure that each MD file has only one H1 heading. If this is not the case - then MkDocs will not display Table of Content. If there are multiple headings - reformat the headings.
+7. Add the `./site` and `./cursor` folders to .gitignore
+8. Choose an icon for the site according to the content.
+   Located at path: theme-->icon-->logo
+9. Need to test the site locally:
+	   - Create and activate Python Virtual Environment
+	     python3 -m venv venv
+	     source venv/bin/activate
+	   - Install dependencies for MkDocs
+	     pip install -r requirements_mkdocs.txt
+	   - mkdocs serve
+10. Fix all WARNINGS in logs. Before fixing, be sure to indicate what problems in the logs you found and agree with me how we solve or skip them. Mkdocs mainly scans hyperlink integrity and outputs this to errors.
+    If you run `mkdocs build --verbose --strict` then the build will fail if there are Warnings, which is convenient.
+11. Output the local mkdocs startup command
+    It will probably be something like: `source venv/bin/activate && mkdocs serve --dev-addr=127.0.0.1:8000` 
+
+
+    

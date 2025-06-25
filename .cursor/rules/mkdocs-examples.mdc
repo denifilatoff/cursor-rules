@@ -1,0 +1,14 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+If there are Examples in NON-Markdown files - they need to be included in the documentation in a readable format.
+For this, MkDocs has Embedding external files feature.
+   1. If Examples are not in docs and not in the project root - ignore them and proceed to the next step.
+   2. If Examples are not in docs folder but in the root - move the entire folder to docs
+   3. Distribute example files into logical groups. Confirm with the user the assignment of files to groups.
+   4. For each group of examples, create a separate file where we use mkdocs to display content directly on the page, adding concise headers and explanations when necessary.
+   5. Use the Mkdocs feature - Embedding external files (https://squidfunk.github.io/mkdocs-material/reference/code-blocks/?h=code+blo#embedding-external-files), so code is not duplicated. Because simply duplicating code will create maintenance issues for the documentation.
+   6. Create a separate Markdown file - an index, with links to the examples we created in the previous step. The index should also have a general description of the examples so users understand whether to visit them or not.
+   7. MANDATORY: include the resulting MD documents in navigation. 
