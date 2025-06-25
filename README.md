@@ -16,28 +16,25 @@ Custom rules for Cursor IDE that automate routine development tasks.
 curl -sSL https://raw.githubusercontent.com/denifilatoff/cursor-rules/main/install.sh | bash
 ```
 
-2. Restart Cursor and open a new chat
+2. **Restart** Cursor and open a new chat
 
 ⚠️ **Warning:** The script will overwrite existing files in `.cursor/rules/` with the same names without warning.
 
 ### Manual Installation
 
 1. Copy the required `.mdc` files to `.cursor/rules/` in your project
-2. Restart Cursor and open a new chat
+2. **Restart** Cursor and open a new chat
 
 ## Usage
 
 Type the following text using the `@` symbol to invoke a specific rule in new chat:
-
 ```
-@mkdocs-init Please create a complete MkDocs Material setup for documentation in current repository
+@command Type your request here
 ```
 
+Examples:
 ```
 @mkdocs-examples Please help to include code examples from the examples folder in documentation
-```
-
-```
 @readme-update Please help to update README.md
 ```
 
