@@ -44,7 +44,7 @@ download_rule "readme-update.mdc"
 echo ""
 echo -e "${GREEN} cursor-rules successfully installed!${NC}"
 echo ""
-echo -e "${YELLOW} Restart Cursor --> Open a new chat
+echo -e "${YELLOW} Restart Cursor --> Open a new chat${NC}"
 echo ""
 echo -e "${YELLOW} Usage:${NC}"
 echo "  @mkdocs-init create MkDocs setup for my project"
