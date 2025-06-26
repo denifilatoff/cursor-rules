@@ -6,7 +6,8 @@ Custom rules for Cursor IDE that automate routine development tasks.
 
 - **mkdocs-init.mdc** - Complete MkDocs Material setup with themes, navigation, and CI/CD
 - **mkdocs-examples.mdc** - Automation for including code examples in documentation
-- **readme-update.mdc** - Update readme.md with industry standards"
+- **readme-update.mdc** - Update readme.md with industry standards
+- **adr-create.mdc** - Format your architecture decision description into structured ADR template
 
 ## Installation
 
@@ -36,6 +37,7 @@ Examples:
 ```
 @mkdocs-examples Please help to include code examples from the examples folder in documentation
 @readme-update Please help to update README.md
+@adr-create We decided to use PostgreSQL instead of MongoDB for user data storage. Context: need ACID transactions and complex queries. Decision: PostgreSQL provides better consistency. Consequences: more complex setup but better data integrity.
 ```
 
 ## License

@@ -1,0 +1,76 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+---
+description: Architecture Decision Record (ADR) authoring guideline 
+Manual rule – invoke with @examples-import.
+---
+
+# Create ADR — Manual Rule
+
+## Goal
+Create ADR based on **strict template** using free text input in Cursor Chat
+
+---
+
+- **Language & tone**  
+  - Use concise, professional, simple IT-English.
+
+- **Template (MUST NOT be modified)**  
+
+    # Architecture Decision Title
+
+    ## Status  
+    *Indicate the current state of the ADR: Proposed, Accepted, Rejected, or Superseded.*  
+
+    #### Date  
+    *Specify when the decision was written or Accepted.*  
+        Format: **ISO 8601**, e.g. 2025-02-16  
+
+    #### Owner  
+    *GitHub account of the person responsible for this ADR.*  
+
+    #### Participants and approvers  
+    *GitHub accounts of all who took part in the decision.*  
+
+    #### Related ADRs  
+    *Links to related ADRs or previous versions.*  
+
+    ## Context  
+    *Problem statement and forces (technological, political, social, project-specific).*  
+
+    ## Decision  
+    *Clearly state the decision (active voice, e.g. “We will …”).*  
+
+    ### Justification  
+    *Why this option was chosen; alternatives considered and rejected.*  
+
+    ## Consequences  
+    *All expected effects — positive, negative, neutral — on team and project.*
+
+- **File-naming convention**  
+  - `####-lowercase-with-dashes.md`, where `####` is a zero-padded sequential index (e.g. `0002-tool-for-password-management.md`).
+
+- **Defaul folder of ADR**
+  - ADR should be created in `docs/adr` folder by default. 
+  - If `docs` folder is not exist in project - ask User about target folder in chat before start
+
+- **Default metadata**  
+  - Initial **Status**: `Proposed`.  
+  - **Date**: creation date in ISO 8601.
+
+- **Content guidelines**  
+  1. Keep each section minimalistic; use lists only where helpful.  
+  2. Preserve **all links** supplied in source notes.  
+  3. Add a short “Best Practices & Statements” paragraph inside **Decision**, referencing relevant industry standards (e.g. OWASP, Twelve-Factor App) when relevant.
+  4. Mark any inferred data with **“_(assumption)_”** at the start of the sentence.
+
+- **Quality checklist (run before saving)**  
+  1. File name matches the naming rule.  
+  2. All headings exactly as in the template and in the same order.  
+  3. Status, Date, and Owner are filled.  
+  4. All provided hyperlinks are present.  
+  5. Assumptions are clearly labelled.  
+  6. Language is simple IT-English; no unexplained jargon.

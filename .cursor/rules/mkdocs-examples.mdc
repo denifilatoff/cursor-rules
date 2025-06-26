@@ -4,7 +4,8 @@ globs:
 alwaysApply: false
 ---
 ---
-description: Import non-Markdown “examples” into the MkDocs site with external-file embeds, then wire them into navigation. Manual rule – invoke with @examples-import.
+description: Import non-Markdown “examples” into the MkDocs site with external-file embeds, then wire them into navigation. 
+Manual rule – invoke with @examples-import.
 ---
 
 # Examples Import — Manual Rule

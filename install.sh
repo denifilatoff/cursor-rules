@@ -40,6 +40,7 @@ download_rule() {
 download_rule "mkdocs-init.mdc"
 download_rule "mkdocs-examples.mdc"
 download_rule "readme-update.mdc"
+download_rule "adr-create.mdc"
 
 echo ""
 echo -e "${GREEN} cursor-rules successfully installed!${NC}"
@@ -50,3 +51,4 @@ echo -e "${YELLOW} Usage:${NC}"
 echo "  @mkdocs-init create MkDocs setup for my project"
 echo "  @mkdocs-examples help include examples in documentation"
 echo "  @readme-update help to update readme.md"
+echo "  @adr-create Pased architecture decision description"
