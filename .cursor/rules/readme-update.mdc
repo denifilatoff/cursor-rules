@@ -10,37 +10,37 @@ description: Scan repository (incl. mkdocs.yml), then refactor README.md into a 
 # README Update — Manual Rule
 
 ## Goal
-Produce a well-structured `README.md` that follows the template below **after** analysing the project’s code, docs and build setup.
+Produce a well-structured `README.md` that follows the template below **after** analysing the project's code, docs and build setup.
 
 ## Template
-1. **Project name & short description**  
-2. **Badges**  
-3. **Table of Contents**  
-4. **Features / key capabilities**  
-5. **Requirements**  
-6. **Installation / Quick start**  
-7. **Usage**  
-8. **Configuration**  
-9. **API Reference / Documentation**  
-10. **Architecture / Diagram**  
-11. **Testing**  
-12. **Contributing**  
+1. **Project name & short description**
+2. **Badges**
+3. **Table of Contents**
+4. **Features / key capabilities**
+5. **Requirements**
+6. **Installation / Quick start**
+7. **Usage**
+8. **Configuration**
+9. **API Reference / Documentation**
+10. **Architecture / Diagram**
+11. **Testing**
+12. **Contributing**
 13. **License**
 
 ## Mandatory pre-processing (Repository Scan)
 Before editing the README:
 
 1. **Enumerate top-level files & dirs** (root, `/docs`, `/examples`, `/scripts`, `/infra`, etc.).
-2. **Detect project type & toolchain**  
-   - Language manifests (`package.json`, `pyproject.toml`, `go.mod`, …).  
-   - Infrastructure files (`Dockerfile`, `docker-compose.yml`, Helm, Terraform).  
-   - CI configs (`.github/workflows`, `.gitlab-ci.yml`).  
-3. **MkDocs detection**  
-   - If `mkdocs.yml` / `mkdocs.yaml` exists, parse:  
-     - `site_url:` → canonical docs-site root (`https://user.github.io/project/`).  
-     - `nav:` tree → list of published pages.  
-   - Map local Markdown files → public URLs; trim `index.md` where appropriate.  
-4. **Skim key files** to extract runtime versions, entry points, test commands, etc.  
+2. **Detect project type & toolchain**
+   - Language manifests (`package.json`, `pyproject.toml`, `go.mod`, …).
+   - Infrastructure files (`Dockerfile`, `docker-compose.yml`, Helm, Terraform).
+   - CI configs (`.github/workflows`, `.gitlab-ci.yml`).
+3. **MkDocs detection**
+   - If `mkdocs.yml` / `mkdocs.yaml` exists, parse:
+     - `site_url:` → canonical docs-site root (`https://user.github.io/project/`).
+     - `nav:` tree → list of published pages.
+   - Map local Markdown files → public URLs; trim `index.md` where appropriate.
+4. **Skim key files** to extract runtime versions, entry points, test commands, etc.
 5. Build a **mental map** of how the project is built, run, tested.
 
 ## Additional rules
@@ -48,45 +48,78 @@ Before editing the README:
 ### A. MkDocs projects
 If step 3 confirms MkDocs + GitHub Pages:
 
-* **Rewrite** README links that point to `/docs/...` so they use the **public site URLs**.  
-* Prefer public URLs when adding new doc links.  
+* **Rewrite** README links that point to `/docs/...` so they use the **public site URLs**.
+* Prefer public URLs when adding new doc links.
 * Keep relative links for content **outside** the MkDocs site.
 
 ### B. Mermaid diagram for Architecture
 For section 10 **Architecture / Diagram**:
 
-* **When to add**  
-  - No diagram exists **and** the high-level architecture can be expressed in ≤ 10 nodes.  
-* **How to add**  
-  - Insert a minimal `mermaid` block (flowchart or sequence) titled `### System overview`.  
-  - Stay coarse-grained: services/modules, external systems, major data stores.  
-  - Example skeleton (edit placeholders, keep ≤ 10 nodes):  
+* **When to add**
+  - No diagram exists **and** the high-level architecture can be expressed in ≤ 10 nodes.
+* **How to add**
+  - Insert a minimal `mermaid` block (flowchart or sequence) titled `### System overview`.
+  - Stay coarse-grained: services/modules, external systems, major data stores.
+  - Example skeleton (edit placeholders, keep ≤ 10 nodes):
     ```mermaid
     flowchart LR
         A([Client]) --> B((API))
         B --> C[(Database)]
         B --> D{{Cache}}
-    ```  
-* **If a diagram already exists**, keep it; only re-locate if needed.  
+    ```
+* **If a diagram already exists**, keep it; only re-locate if needed.
 * **If architecture is too complex**, create heading and leave `<!-- TODO: add diagram -->`.
 
+### C. Badges — selection rule (max 5)
+
+Insert badges in usual place in `README.md`.
+Average number of **Badges** is five; No more, if less is OK.
+Use [Shields.io](mdc:https:/shields.io) with the `style=flat-square` query‑param and ensure every badge is a clickable link.
+
+**Badge Selection Priority:**
+
+1. **Build / CI status** *(Always include)*
+   - Use: Main workflow on default branch
+   - Example: `[![Build](mdc:https:/github.com/<OWNER>/<REPO>/actions/workflows/ci.yml/badge.svg)](https://github.com/<OWNER>/<REPO>/actions/workflows/ci.yml)`
+
+2. **Test coverage** *(If repository has test suite & coverage step)*
+   - Example: `[![Coverage](mdc:https:/img.shields.io/codecov/c/github/<OWNER>/<REPO>?label=coverage&style=flat-square)](https://app.codecov.io/gh/<OWNER>/<REPO>)`
+
+3. **Package version** *(If project publishes to a registry)*
+   - **Maven:** `[![Maven Central](mdc:https:/img.shields.io/maven-central/v/<GROUP>/<ARTIFACT>?label=maven%20central&style=flat-square)](https://central.sonatype.com/artifact/<GROUP>/<ARTIFACT>)`
+   - **npm:** `[![npm](mdc:https:/img.shields.io/npm/v/<PACKAGE>?style=flat-square)](https://www.npmjs.com/package/<PACKAGE>)`
+   - **PyPI:** `[![PyPI](mdc:https:/img.shields.io/pypi/v/<PACKAGE>?style=flat-square)](https://pypi.org/project/<PACKAGE>/)`
+   - **Docker:** `[![Docker](mdc:https:/img.shields.io/badge/docker-ghcr.io-blue?style=flat-square)](https://github.com/<OWNER>/<REPO>/pkgs/container/<IMAGE>)`
+
+4. **API / Docs site** *(If docs are hosted - MkDocs, Javadoc, etc.)*
+   - Example: `[![Docs](mdc:https:/img.shields.io/website?url=<DOCS_URL>&label=docs&style=flat-square)](<DOCS_URL>)`
+
+5. **Latest release tag** *(If releases are managed on GitHub)*
+   - Example: `[![Release](mdc:https:/img.shields.io/github/v/release/<OWNER>/<REPO>?style=flat-square)](https://github.com/<OWNER>/<REPO>/releases)`
+
+**Fallback:** If any badge above is not applicable (e.g. no registry yet), substitute **Security scan status**:
+`[![CodeQL](mdc:https:/github.com/<OWNER>/<REPO>/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/<OWNER>/<REPO>/actions/workflows/codeql-analysis.yml)`
+
+Do **not** add license, downloads, stars, or other decorative badges.
+
 ## Constraints during rewrite
-- Preserve every sentence, badge, code block, image, link and list unless relocation or deduplication is essential.  
-- **Do not rewrite technical content**; only move, merge headings or fix typos.  
-- Merge multiple fragments that belong to the same section in original order.  
-- If a required section is missing, add the heading followed by `<!-- TODO -->`.  
-- Use the **exact English section titles** above.  
-- Maintain heading levels (`#`, `##`, …) relative to root.  
-- Insert `<!-- toc -->` right after section 2 if no TOC exists.  
+- Preserve every sentence, badge, code block, image, link and list unless relocation or deduplication is essential.
+- **Do not rewrite technical content**; only move, merge headings or fix typos.
+- Merge multiple fragments that belong to the same section in original order.
+- If a required section is missing, add the heading followed by `<!-- TODO -->`.
+- Use the **exact English section titles** above.
+- Maintain heading levels (`#`, `##`, …) relative to root.
+- Insert `<!-- toc -->` right after section 2 if no TOC exists.
 - Place unmatched content under its own heading **after section 13**.
 
 ## Algorithm
-0. **Repository scan** — perform steps 1-5 above.  
-1. Parse existing `README.md` headings (case-insensitive; recognise variants such as “Setup”, “How to use”).  
-2. Map each heading to the nearest template section using insights from the scan.  
-3. Re-order content to match the 1 → 13 sequence.  
-4. Rename headings to the exact template wording if they differ stylistically.  
-5. Apply MkDocs link-rewriting logic (if relevant).  
-6. Apply Mermaid diagram rule B.  
-7. Fill in missing details gleaned from the scan, or mark `<!-- TODO -->`.  
+0. **Repository scan** — perform steps 1-5 above.
+1. Parse existing `README.md` headings (case-insensitive; recognise variants such as "Setup", "How to use").
+2. Map each heading to the nearest template section using insights from the scan.
+3. Re-order content to match the 1 → 13 sequence.
+4. Rename headings to the exact template wording if they differ stylistically.
+5. Apply MkDocs link-rewriting logic (if relevant).
+6. Apply Mermaid diagram rule B.
+7. Insert or prune badges according to rule C (ensure exactly five).
+7. Fill in missing details gleaned from the scan, or mark `<!-- TODO -->`.
 8. Output **only** the complete, updated `README.md`.
