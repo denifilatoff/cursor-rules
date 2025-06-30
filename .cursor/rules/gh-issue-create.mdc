@@ -1,0 +1,28 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+---
+description: Generate a GitHub Feature Request or Issue from chat and confirm before posting
+globs: []
+alwaysApply: false
+---
+
+When the user invokes `@create-issue`:
+
+1. **Analyze** the last messages in Chat and user's latest message describing a feature request (including any technical details).
+2. **Inject** brief, relevant best practices for the issue or feature request
+3. **Format** the output exactly as a GitHub Issue with sections:
+   - **Title**
+   - **Problem Description**
+   - **Proposed Solution**
+
+4. **Present** the formatted Issue back to the user, prefaced with:
+   > “Here is the draft Issue. Is it OK? (Yes/No)”
+
+5. **Wait** for the user’s “Yes” confirmation.
+
+6. **Provide** final description in chat for copy-paste in GH Issues
+
+Use simple language and a style appropriate for GitHub Issues.

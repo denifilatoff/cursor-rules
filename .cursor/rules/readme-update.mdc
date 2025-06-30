@@ -13,19 +13,18 @@ description: Scan repository (incl. mkdocs.yml), then refactor README.md into a 
 Produce a well-structured `README.md` that follows the template below **after** analysing the project's code, docs and build setup.
 
 ## Template
-1. **Project name & short description**
-2. **Badges**
-3. **Table of Contents**
-4. **Features / key capabilities**
-5. **Requirements**
-6. **Installation / Quick start**
-7. **Usage**
-8. **Configuration**
-9. **API Reference / Documentation**
-10. **Architecture / Diagram**
-11. **Testing**
-12. **Contributing**
-13. **License**
+1. **Project name & short description** + **Badges**
+2. **Table of Contents** (use only `<!-- toc -->` for Github)
+3. **Features / key capabilities**
+4. **Requirements**
+5. **Installation / Quick start**
+6. **Usage**
+7. **Configuration**
+8. **API Reference / Documentation**
+9. **Architecture / Diagram**
+10. **Testing**
+11. **Contributing**
+12. **License**
 
 ## Mandatory pre-processing (Repository Scan)
 Before editing the README:
