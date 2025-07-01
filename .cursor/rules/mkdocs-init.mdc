@@ -330,7 +330,7 @@ Pick a Material-Design icon that matches the project domain and set it at
 ### 9. Fix _all_ build warnings
 
 Fix all WARNINGS in logs. Before fixing, be sure to indicate what problems in the logs you found and agree with me how we solve or skip them. Mkdocs mainly scans hyperlink integrity and outputs this to errors.
-    If you run `mkdocs build --verbose --strict` then the build will fail if there are Warnings, which is convenient.
+    If you run `mkdocs build --verbose --strict` then the build will fail if there are Warnings - you need to start next circle of fixing. At the result - ALL warnings must be fixed.
 
 ### 10. Echo the local-serve command
 
