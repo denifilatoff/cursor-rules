@@ -14,17 +14,16 @@ Produce a well-structured `README.md` that follows the template below **after** 
 
 ## Template
 1. **Project name & short description** + **Badges**
-2. **Table of Contents** (use only `<!-- toc -->` for Github)
-3. **Features / key capabilities**
-4. **Requirements**
-5. **Installation / Quick start**
-6. **Usage**
-7. **Configuration**
-8. **API Reference / Documentation**
-9. **Architecture / Diagram**
-10. **Testing**
-11. **Contributing**
-12. **License**
+2. **Features / key capabilities**
+3. **Requirements**
+4. **Installation / Quick start**
+5. **Usage**
+6. **Configuration**
+7. **API Reference / Documentation**
+8. **Architecture / Diagram**
+9. **Testing**
+10. **Contributing**
+11. **License**
 
 ## Mandatory pre-processing (Repository Scan)
 Before editing the README:
@@ -52,7 +51,7 @@ If step 3 confirms MkDocs + GitHub Pages:
 * Keep relative links for content **outside** the MkDocs site.
 
 ### B. Mermaid diagram for Architecture
-For section 10 **Architecture / Diagram**:
+For section 9 **Architecture / Diagram**:
 
 * **When to add**
   - No diagram exists **and** the high-level architecture can be expressed in ≤ 10 nodes.
@@ -73,52 +72,64 @@ For section 10 **Architecture / Diagram**:
 
 Insert badges in usual place in `README.md`.
 Average number of **Badges** is five; No more, if less is OK.
-Use [Shields.io](mdc:https:/shields.io) with the `style=flat-square` query‑param and ensure every badge is a clickable link.
+Use [Shields.io](https:/shields.io) with the `style=flat-square` query‑param and ensure every badge is a clickable link.
 
 **Badge Selection Priority:**
 
 1. **Build / CI status** *(Always include)*
    - Use: Main workflow on default branch
-   - Example: `[![Build](mdc:https:/github.com/<OWNER>/<REPO>/actions/workflows/ci.yml/badge.svg)](https://github.com/<OWNER>/<REPO>/actions/workflows/ci.yml)`
+   - Example: `[![Build](https:/github.com/<OWNER>/<REPO>/actions/workflows/ci.yml/badge.svg)](https://github.com/<OWNER>/<REPO>/actions/workflows/ci.yml)`
 
 2. **Test coverage** *(If repository has test suite & coverage step)*
-   - Example: `[![Coverage](mdc:https:/img.shields.io/codecov/c/github/<OWNER>/<REPO>?label=coverage&style=flat-square)](https://app.codecov.io/gh/<OWNER>/<REPO>)`
+   - Example: `[![Coverage](https:/img.shields.io/codecov/c/github/<OWNER>/<REPO>?label=coverage&style=flat-square)](https://app.codecov.io/gh/<OWNER>/<REPO>)`
 
 3. **Package version** *(If project publishes to a registry)*
-   - **Maven:** `[![Maven Central](mdc:https:/img.shields.io/maven-central/v/<GROUP>/<ARTIFACT>?label=maven%20central&style=flat-square)](https://central.sonatype.com/artifact/<GROUP>/<ARTIFACT>)`
-   - **npm:** `[![npm](mdc:https:/img.shields.io/npm/v/<PACKAGE>?style=flat-square)](https://www.npmjs.com/package/<PACKAGE>)`
-   - **PyPI:** `[![PyPI](mdc:https:/img.shields.io/pypi/v/<PACKAGE>?style=flat-square)](https://pypi.org/project/<PACKAGE>/)`
-   - **Docker:** `[![Docker](mdc:https:/img.shields.io/badge/docker-ghcr.io-blue?style=flat-square)](https://github.com/<OWNER>/<REPO>/pkgs/container/<IMAGE>)`
+   - **Maven:** `[![Maven Central](https:/img.shields.io/maven-central/v/<GROUP>/<ARTIFACT>?label=maven%20central&style=flat-square)](https://central.sonatype.com/artifact/<GROUP>/<ARTIFACT>)`
+   - **npm:** `[![npm](https:/img.shields.io/npm/v/<PACKAGE>?style=flat-square)](https://www.npmjs.com/package/<PACKAGE>)`
+   - **PyPI:** `[![PyPI](https:/img.shields.io/pypi/v/<PACKAGE>?style=flat-square)](https://pypi.org/project/<PACKAGE>/)`
+   - **Docker:** `[![Docker](https:/img.shields.io/badge/docker-ghcr.io-blue?style=flat-square)](https://github.com/<OWNER>/<REPO>/pkgs/container/<IMAGE>)`
 
 4. **API / Docs site** *(If docs are hosted - MkDocs, Javadoc, etc.)*
-   - Example: `[![Docs](mdc:https:/img.shields.io/website?url=<DOCS_URL>&label=docs&style=flat-square)](<DOCS_URL>)`
+   - Example: `[![Docs](https:/img.shields.io/website?url=<DOCS_URL>&label=docs&style=flat-square)](<DOCS_URL>)`
 
 5. **Latest release tag** *(If releases are managed on GitHub)*
-   - Example: `[![Release](mdc:https:/img.shields.io/github/v/release/<OWNER>/<REPO>?style=flat-square)](https://github.com/<OWNER>/<REPO>/releases)`
+   - Example: `[![Release](https:/img.shields.io/github/v/release/<OWNER>/<REPO>?style=flat-square)](https://github.com/<OWNER>/<REPO>/releases)`
 
 **Fallback:** If any badge above is not applicable (e.g. no registry yet), substitute **Security scan status**:
-`[![CodeQL](mdc:https:/github.com/<OWNER>/<REPO>/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/<OWNER>/<REPO>/actions/workflows/codeql-analysis.yml)`
+`[![CodeQL](https:/github.com/<OWNER>/<REPO>/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/<OWNER>/<REPO>/actions/workflows/codeql-analysis.yml)`
 
 Do **not** add license, downloads, stars, or other decorative badges.
+
+## **Post-processing — README fact-check validation**
+After the new `README.md` has been generated:
+
+1. **Verify every section** (1 → 12) against:
+   - Source code, configuration and manifest files detected during the pre-scan.
+   - Official documentation in `/docs`, MkDocs site content, and any referenced pages.
+2. **FIX problems**:
+   - Fix all found problems and discrapancies in content of `README.md`
+3. **No automatic edits to source files or docs** are permitted.
+   Only the `README.md` may be modified, and only within the current rewrite.
 
 ## Constraints during rewrite
 - Preserve every sentence, badge, code block, image, link and list unless relocation or deduplication is essential.
 - **Do not rewrite technical content**; only move, merge headings or fix typos.
+- **Do not alter any file other than `README.md`.**
 - Merge multiple fragments that belong to the same section in original order.
 - If a required section is missing, add the heading followed by `<!-- TODO -->`.
 - Use the **exact English section titles** above.
 - Maintain heading levels (`#`, `##`, …) relative to root.
-- Insert `<!-- toc -->` right after section 2 if no TOC exists.
-- Place unmatched content under its own heading **after section 13**.
+- Place unmatched content under its own heading **after section 13**
 
 ## Algorithm
 0. **Repository scan** — perform steps 1-5 above.
 1. Parse existing `README.md` headings (case-insensitive; recognise variants such as "Setup", "How to use").
 2. Map each heading to the nearest template section using insights from the scan.
-3. Re-order content to match the 1 → 13 sequence.
+3. Re-order content to match the 1 → 11 sequence.
 4. Rename headings to the exact template wording if they differ stylistically.
 5. Apply MkDocs link-rewriting logic (if relevant).
 6. Apply Mermaid diagram rule B.
 7. Insert or prune badges according to rule C (ensure exactly five).
-7. Fill in missing details gleaned from the scan, or mark `<!-- TODO -->`.
-8. Output **only** the complete, updated `README.md`.
+8. Fill in missing details gleaned from the scan, or mark `<!-- TODO -->`.
+9. **Run post-processing fact-check** (do not save content of report in `README.md`, only in chat)
+10. Output **only** the complete, updated `README.md`.
